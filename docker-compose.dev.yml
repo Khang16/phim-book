@@ -1,0 +1,27 @@
+services:
+  # Lưu ý: Hiện tại DB đã chuyển lên Render Cloud. Service postgres dưới đây là dự phòng nếu muốn chạy DB local.
+  postgres: 
+    image: postgres:16-alpine
+    container_name: phim-book-postgres
+    environment: 
+      POSTGRES_USER: khang
+      POSTGRES_PASSWORD: hffMX411bWde3BPQ2lJZjqGg7y7561ad
+      POSTGRES_DB: phimbook
+    ports:
+      - '5434:5432'
+    volumes: 
+      - phim-book-pgdata:/var/lib/postgresql/data
+
+  redis: 
+    image: redis:7-alpine
+    container_name: phim-book-redis
+    command: redis-server --appendonly yes
+    ports:
+      - '36379:6379'
+    volumes:
+      - phim-book-redisdata:/data
+volumes:
+  phim-book-pgdata:
+  phim-book-redisdata:
+
+    
