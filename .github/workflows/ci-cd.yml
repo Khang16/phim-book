@@ -1,0 +1,51 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop  # Hoặc main tùy nhánh bạn dùng
+
+jobs:
+  # Giai đoạn 1: CI (Kiểm tra chất lượng code)
+  ci:
+    name: Continuous Integration (Lint, Test, Build)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check Code Linting
+        run: pnpm run lint
+
+      - name: Run Unit Tests
+        run: pnpm run test
+
+      - name: Test Build NestJS
+        run: pnpm run build
+
+  # Giai đoạn 2: CD (Chỉ chạy khi CI thành công 100%)
+  cd:
+    name: Continuous Deployment (Trigger Render)
+    needs: ci
+    runs-on: ubuntu-latest
+    if: success()
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
