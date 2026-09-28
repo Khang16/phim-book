@@ -1,11 +1,11 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SkipThrottle } from '@nestjs/throttler';
 
 @ApiTags('Health')
-@Controller('health')
+@Controller({ version: VERSION_NEUTRAL })
 export class HealthController {
-  @Get()
+  @Get(['', 'health'])
   @SkipThrottle()
   @ApiOperation({ summary: 'Kiểm tra trạng thái máy chủ (Health Check)' })
   @ApiResponse({

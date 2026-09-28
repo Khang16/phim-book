@@ -53,7 +53,9 @@ export function setupApp(
   );
 
   // API versioning
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', {
+    exclude: ['/', 'health'],
+  });
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
