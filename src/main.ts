@@ -21,7 +21,7 @@ async function bootstrap() {
   setupApp(app, logger, configService);
   setupSwagger(app);
 
-  await app.listen(appConfig.port);
+  await app.listen(appConfig.port, '0.0.0.0');
 
   logger.log(
     `🚀 Application is running on: http://localhost:${appConfig.port}/api/v1`,
